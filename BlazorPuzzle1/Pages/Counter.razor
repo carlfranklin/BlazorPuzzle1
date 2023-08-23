@@ -1,0 +1,37 @@
+﻿@page "/counter"
+@using System.Timers
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Timer Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<span>Interval (seconds): </span>
+<input disabled="@buttonDisabled" type="number" class="form-control" @bind="interval" />
+<br/>
+
+<button disabled="@buttonDisabled" class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+
+    private int currentCount = 0;
+    private int interval = 1;
+    private Timer timer;
+    private bool buttonDisabled = false;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+        buttonDisabled = true;
+        timer = new Timer(TimeSpan.FromSeconds(interval));
+        timer.Elapsed += Timer_Elapsed;
+        timer.Start();
+    }
+
+    private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+        currentCount++;
+        StateHasChanged();
+    }   
+}
